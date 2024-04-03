@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
   }
 }
