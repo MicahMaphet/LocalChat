@@ -49,23 +49,36 @@ http.createServer((req, res) => {
     }
 
     res.writeHead(200, {'Content-Type': 'text/html'});
-    if (req.url == "/") {
-        fs.readFile("index.html", (err, data) => {
-            if (err) throw err;
-            res.write(data);
-            res.end()
-        });
-    } else if (req.url == "/chat") {
-        fs.readFile("chat.html", (err, data) => {
-            if (err) throw err;
-            res.write(data);
-        });
-    } else if (req.url == "/bot") {
-        fs.readFile("bot.html", (err, data) => {
-            if (err) throw err;
-            res.write(data);
-        });
-    } else res.end(`404 page ${page} could not be found`);
+    switch (req.url) {
+        case "/":
+            fs.readFile("index.html", (err, data) => {
+                if (err) throw err;
+                res.write(data);
+                res.end()
+            });
+            break;
+        case "/chat":
+            fs.readFile("chat.html", (err, data) => {
+                if (err) throw err;
+                res.write(data);
+            });
+            break;
+        case "/bot":
+            fs.readFile("bot.html", (err, data) => {
+                if (err) throw err;
+                res.write(data);
+            });
+            break;
+        case "/uploadfiles":
+            fs.readFile("uploadfiles.html", (err, data) => {
+                if (err) throw err;
+                res.write(data);
+            });
+            break;
+        default:
+            res.end(`404 page ${page} could not be found`);
+            break;
+    }
 }).listen(PORT);
 
 console.log(`Listening on port ${PORT}`);
