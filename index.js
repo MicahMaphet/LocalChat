@@ -1,12 +1,25 @@
 function message() {
-    fetch('/message', {
+    const textbox = document.getElementById('message-box');
+    fetch('/post/message', {
         method: 'POST',
         body: JSON.stringify({
-            message: document.getElementById('message-box').value
+            message: textbox.value
         }),
         headers: {
             'Content-type': 'application/json'
         }
     });
-    document.write(`message ${document.getElementById('message-box').value} sent`);
+    textbox.value = '';
+}
+
+function setUsername() {
+    const textbox = document.getElementById('name');
+    document.cookie = `username=${textbox.value}`;
+    fetch('/post/setusername')
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
