@@ -23,14 +23,16 @@ app.get('/usename', (req, res) => {
     res.sendFile(__dirname + '/usename.html');
 });
 
-app.listen(port);
-
 app.post('/post/message', async (req, res) => {
-    database.add(req.body.message);
+    database.addMessage(req.body.message);
 });
 
 app.post('/post/setusername', async (req, res) => {
-    
+    if (req.body.name === null)
+        res.send().status(404);
+    else
+        database.addUser(req.body.name);
 });
 
+app.listen(port);
 console.log(`Listening on port ${8080}`);
