@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script src="index.js"></script>
+        <h1>Messages</h1>
+        <input id="message-box">
+        <button onclick="message()">submit</button>
+        <p id="messages"></p>
+        <script>
+            async function loadMessages() 
+            { document.getElementById('messages').innerHTML = JSON.stringify(await getMessages()); }
+            loadMessages();
+        </script>
+    </body>
+</html>

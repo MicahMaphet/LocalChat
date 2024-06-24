@@ -2,11 +2,13 @@
 <html>
     <body>
         <script src="index.js"></script>
-        <p id="question">Would you like to continue with your last name</p>
-        <button id="use">Use current name</button>
+        <p id="question">Would you like to continue as <a id='current-name'></a>?</p>
+        <a href="messages" id="use">Use </a>
+        or
         <a href="setusername">Set Name</href>
         <script>
-            // document.getElementById('question').setAttribute('innerHTML')
+            document.getElementById('current-name').innerHTML = getCookie('username');
+            document.getElementById('use').innerHTML = 'use ' + getCookie('username');
         </script>
     </body>
-</html>
+</html

@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const database = require('./database.js')
+const storage = require('./storage');
 
 const port = 8080;
 const app = express();
@@ -23,15 +23,20 @@ app.get('/usename', (req, res) => {
     res.sendFile(__dirname + '/usename.html');
 });
 
+app.get('/messages', (req, res) => {
+    res.sendFile(__dirname + '/messages.html');
+});
+
+app.get('/json/messages', async (req, res) => {
+    res.end(JSON.stringify(await storage.messages.get()));
+});
+
 app.post('/post/message', async (req, res) => {
-    database.addMessage(req.body.message);
+    storage.messages.add(req.body.message);
 });
 
 app.post('/post/setusername', async (req, res) => {
-    if (req.body.name === null)
-        res.send().status(404);
-    else
-        database.addUser(req.body.name);
+    storage.users.add(req.body.name);
 });
 
 app.listen(port);

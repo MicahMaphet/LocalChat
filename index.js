@@ -32,3 +32,13 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
+
+async function getMessages() {
+    const response = await fetch('json/messages');
+    console.log('response');
+    console.log(response);
+    const jsondata = await response.json();
+    console.log('jsondata');
+    console.log(jsondata);
+    return jsondata;
+}

@@ -4,3 +4,7 @@ Content-Type: application/json
 {
     "message": "this is a message"
 }
+
+###
+
+GET http://localhost:8080/json/messages
