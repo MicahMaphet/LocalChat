@@ -32,6 +32,7 @@ app.get('/json/messages', async (req, res) => {
 });
 
 app.post('/post/message', async (req, res) => {
+    console.log(req.body);
     storage.messages.add(req.body.message);
 });
 

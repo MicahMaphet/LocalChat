@@ -6,6 +6,7 @@ const client = new MongoClient(uri);
 class messages {
     static async add(text) {
         try {
+            client.connect();
             const database = client.db('localchat');
             const messagesDB = database.collection('messages');
     
@@ -39,6 +40,7 @@ class messages {
 class users {
     static async add(name) {
         try {
+            client.connect();
             const database = client.db('localchat');
             const usersDB = database.collection('users');
     
@@ -50,6 +52,7 @@ class users {
 
     static async get() {
         try {
+            client.connect();
             const database = client.db('localchat');
             const usersDB = database.collection('users');
 
