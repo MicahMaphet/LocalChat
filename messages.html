@@ -16,10 +16,17 @@
             const form = document.getElementById('form');
             const input = document.getElementById('input');
             const messages = document.getElementById('messages');
-
+            
             const name = getCookie('username');
             if (!name)
                 window.location = 'setusername';
+        
+            function addMessage(msg) {
+                const item = document.createElement('li');
+                item.textContent = `From: ${msg.name}: ${msg.content}`;
+                messages.appendChild(item);
+                window.scrollTo(0, document.body.scrollHeight);
+            }
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -27,16 +34,23 @@
                     socket.emit('chat message', {
                         name: name,
                         content: input.value
-                    });
+                    });    
                     input.value = '';
-                }
+                }    
+            });    
+
+            socket.on(`sending past messages to ${name}`, (msg) => {
+                addMessage(msg);
+            });
+            
+            socket.emit('get past messages', name);
+
+            socket.once(`sent all messages to ${name}`, () => {
+                socket.off(`sending past messages to ${name}`, socket);
             });
 
             socket.on('chat message', (msg) => {
-                const item = document.createElement('li');
-                item.textContent = `From: ${msg.name}: ${msg.content}`;
-                messages.appendChild(item);
-                window.scrollTo(0, document.body.scrollHeight);
+                addMessage(msg);
             });
         </script>
     </body>

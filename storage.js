@@ -2,20 +2,35 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 
-
+/**
+ * Class for manipulating and reading the message data
+ */
 class messages {
-    static async add(text) {
+    /**
+     * Add a message with a name and content to the messages database
+     * 
+     * @param {*} msg 
+     * {
+     *   name: 'james',
+     *   content: 'hello'
+     * }
+     */
+    static async add(msg) {
         try {
             client.connect();
             const database = client.db('localchat');
             const messagesDB = database.collection('messages');
     
-            await messagesDB.insertOne({ message: text });
+            await messagesDB.insertOne(msg);
         } finally {
             client.close();
         }
     }
 
+    /**
+     * 
+     * @returns json data of the database
+     */
     static async get() {
         try {
             client.connect();
@@ -27,7 +42,10 @@ class messages {
             var messageJson = [];
             for await (const m of cursor) {
                 messageJson.push(
-                    { message: m.message }
+                    { 
+                        name: m.name,
+                        content: m.content
+                    }
                 );
             }
             return messageJson;
@@ -37,7 +55,15 @@ class messages {
     }
 }
 
+/**
+ * Class for manipulating and reading user data
+ */
 class users {
+    /**
+     * Adds a name to the users database
+     * 
+     * @param {*} name
+     */
     static async add(name) {
         try {
             client.connect();
@@ -50,13 +76,25 @@ class users {
         }
     }
 
+    /**
+     * Returns a list of users
+     * 
+     * @returns List of users
+     */
     static async get() {
         try {
             client.connect();
             const database = client.db('localchat');
             const usersDB = database.collection('users');
 
-            return await usersDB.find();
+            const cursor = await usersDB.find();
+
+            var userJson = [];
+            for await(m of cursor) {
+                userJson.push({ name: m.name });
+            }
+
+            return userJson;
         } finally {
             await client.close();
         }
