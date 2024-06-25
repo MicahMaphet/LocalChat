@@ -24,7 +24,7 @@ function setUsername() {
             'Content-type': 'application/json'
         }
     });
-    document.write(textbox.value);
+    window.location = 'messages';
 }
 
 function getCookie(name) {
