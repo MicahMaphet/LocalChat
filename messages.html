@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <script src="node_modules/socket.io/client-dist/socket.io.js"></script>
-
+        
         <h1>Messages</h1>
-
+        
         <ul id="messages"></ul>
         <form id="form" action="">
             <input id="input"/><button>Send</button>
         </form>
-
-
+        
+        
+        <script src="node_modules/socket.io/client-dist/socket.io.js"></script>
+        <script src="index.js"></script>
         <script>
             const socket = io();
 
@@ -18,17 +19,22 @@
             const input = document.getElementById('input');
             const messages = document.getElementById('messages');
 
+            const name = getCookie('username');
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 if (input.value) {
-                    socket.emit('chat message', input.value);
+                    socket.emit('chat message', {
+                        name: name,
+                        content: input.value
+                    });
                     input.value = '';
                 }
             });
 
             socket.on('chat message', (msg) => {
                 const item = document.createElement('li');
-                item.textContent = msg;
+                item.textContent = `From: ${msg.name}: ${msg.content}`;
                 messages.appendChild(item);
                 window.scrollTo(0, document.body.scrollHeight);
             });
