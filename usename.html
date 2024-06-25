@@ -7,8 +7,12 @@
         or
         <a href="setusername">Set Name</href>
         <script>
-            document.getElementById('current-name').innerHTML = getCookie('username');
-            document.getElementById('use').innerHTML = 'use ' + getCookie('username');
+            const name = getCookie('username');
+            if (!name)
+                window.location = 'setusername';
+
+            document.getElementById('current-name').innerHTML = name;
+            document.getElementById('use').innerHTML = 'use ' + name;
         </script>
     </body>
 </html

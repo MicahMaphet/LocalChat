@@ -16,14 +16,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/handle-username.html');
 });
 
-app.get('/index.js', (req, res) => {
-    res.sendFile(__dirname + '/index.js');
-});
-
-app.get('/node_modules/socket.io/client-dist/socket.io.js', (req, res) => {
-    res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js')
-});
-
 app.get('/setusername', (req, res) => {
     res.sendFile(__dirname + '/setusername.html');
 });
@@ -36,23 +28,17 @@ app.get('/messages', (req, res) => {
     res.sendFile(__dirname + '/messages.html');
 });
 
-app.get('/json/messages', async (req, res) => {
-    res.end(JSON.stringify(await storage.messages.get()));
+app.get('/index.js', (req, res) => {
+    res.sendFile(__dirname + '/index.js');
 });
 
-app.post('/post/message', async (req, res) => {
-    console.log(req.body);
-    storage.messages.add(req.body.message);
-});
-
-app.post('/post/setusername', async (req, res) => {
-    storage.users.add(req.body.name);
+app.get('/node_modules/socket.io/client-dist/socket.io.js', (req, res) => {
+    res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js')
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('user connected');
     socket.on('chat message', (msg) => {
-        console.log(`From: ${msg.name}\n${msg.content}`)
         io.emit('chat message', {
             name: msg.name,
             content: msg.content

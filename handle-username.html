@@ -1,9 +1,8 @@
 <script src="index.js"></script>
 <script>
     var username = getCookie('username');
-    if (username == '') {
-        window.location.replace('setusername')
-    } else { 
+    if (username)
         window.location.replace('usename');
-    }
+    else
+        window.location.replace('setusername');
 </script>
