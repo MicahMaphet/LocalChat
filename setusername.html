@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <script src="index.js"></script>
-        <input id="name">
-        <button onclick="setUsername()">Set Username</button>
+        <form id="form" action="">
+            <input id="text-box"/><button>Set Username</button>
+        </form>
+
+        <script>
+            const form = document.getElementById('form');
+            const textBox = document.getElementById('text-box');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (textBox.value) {
+                    document.cookie = 'username=' + textBox.value;
+                    window.location = 'messages';
+                }
+            });
+        </script>
     </body>
 </html>
