@@ -1,8 +1,10 @@
 <script src="index.js"></script>
 <script>
     var username = getCookie('username');
+    // if a username is already given, take the user to /usename
     if (username)
         window.location.replace('usename');
+    // otherwise take the username to /setusername
     else
         window.location.replace('setusername');
 </script>

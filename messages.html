@@ -5,22 +5,36 @@
         
         <ul id="messages"></ul>
         <form id="form" action="">
-            <input id="input"/><button>Send</button>
+            <input id="text-box"/><button>Send</button>
         </form>
         
         <script src="node_modules/socket.io/client-dist/socket.io.js"></script>
         <script src="index.js"></script>
         <script>
+            // socket for sending and recieved messages
             const socket = io();
 
+            // form containing the text box and the messages
             const form = document.getElementById('form');
-            const input = document.getElementById('input');
+            // text box for typing messages
+            const textBox = document.getElementById('text-box');
+            // all messages sent by the server
             const messages = document.getElementById('messages');
             
             const name = getCookie('username');
+            // if a username is not given, bring the user to /setusername
             if (!name)
                 window.location = 'setusername';
         
+            /**
+             * Displays a message
+             * 
+             * @param {*} msg
+             * {
+             *   name: 'name of the user',
+             *   content: 'content the user is sending'
+             * }
+             */
             function addMessage(msg) {
                 const item = document.createElement('li');
                 item.textContent = `From: ${msg.name}: ${msg.content}`;
@@ -28,27 +42,35 @@
                 window.scrollTo(0, document.body.scrollHeight);
             }
 
+            /* When the message is submited, emit the message to the server
+               and clear the text box */
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                if (input.value) {
+                if (textBox.value) {
                     socket.emit('chat message', {
                         name: name,
-                        content: input.value
+                        content: textBox.value
                     });    
-                    input.value = '';
+                    textBox.value = '';
                 }    
             });    
 
+            // Adds messages when the server sends the past messages to the user
             socket.on(`sending past messages to ${name}`, (msg) => {
                 addMessage(msg);
             });
-            
+
+            // Asks the server for the past messages
             socket.emit('get past messages', name);
 
+            /* When the server has sent all the past messages to the user, 
+               stop listening for past messages */
             socket.once(`sent all messages to ${name}`, () => {
                 socket.off(`sending past messages to ${name}`, socket);
             });
 
+            /* When a chat messages is recieved from the server,
+               display it on the page */
             socket.on('chat message', (msg) => {
                 addMessage(msg);
             });

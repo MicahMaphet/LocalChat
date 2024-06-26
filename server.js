@@ -38,6 +38,7 @@ app.get('/node_modules/socket.io/client-dist/socket.io.js', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('user connected');
+    // send past messages from MongoDB to the user on request
     socket.on('get past messages', async (name) => {
         const pastMessages = await storage.messages.get();
         pastMessages.forEach(msg => {
@@ -46,10 +47,10 @@ io.on('connection', (socket) => {
                 content: msg.content
             });
         })
-
         io.emit(`sent all messages to ${name}`);
     });
 
+    // Emit messages to the clients when a message is recieved
     socket.on('chat message', (msg) => {
         storage.messages.add(msg);
         io.emit('chat message', {

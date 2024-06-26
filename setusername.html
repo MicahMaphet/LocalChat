@@ -9,6 +9,7 @@
             const form = document.getElementById('form');
             const textBox = document.getElementById('text-box');
 
+            // When the username is submitted, save it in a cookie and change page to /messages
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 if (textBox.value) {
