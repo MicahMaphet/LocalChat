@@ -60,6 +60,14 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`)
+process.on('SIGINT', function() {
+    storage.stop();
 });
+
+storage.init()
+    .then(() => {
+        server.listen(port, () => {
+            console.log(`Server listening at http://localhost:${port}`)
+        });
+    })
+    .catch(console.error)
