@@ -1,79 +1,83 @@
 const MongoClient = require('mongodb').MongoClient;
-const uri = 'mongodb://localhost:27017';
-const client = new MongoClient(uri);
+
+
+class Storage {
+    constructor() {
+        // TODO use configurable db params
+        // const uri = 'mongodb://localhost:27017';
+        const uri = 'mongodb+srv://stickituser:17v^LC9FU7F3gH6i@cluster0.r9vurd9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+        this.client = new MongoClient(uri);
+        this.db = this.client.db('localchat');
+    }
+
+    async init() {
+        await this.client.connect();
+        this.messages = new Messages(this.db);
+        this.users = new Users(this.db);
+    }
+
+    stop() {
+        this.client.close();
+    }
+}
 
 /**
  * Class for manipulating and reading the message data
  */
-class messages {
+class Messages {
+    constructor(db) {
+        this.collection = db.collection('messages');
+    }
     /**
      * Add a message with a name and content to the messages database
      * 
-     * @param {*} msg 
+     * @param {Object} param
+     * @param {String} param.name
+     * @param {String} param.content
      * {
      *   name: 'james',
      *   content: 'hello'
      * }
      */
-    static async add(msg) {
-        try {
-            client.connect();
-            const database = client.db('localchat');
-            const messagesDB = database.collection('messages');
-    
-            await messagesDB.insertOne(msg);
-        } finally {
-            client.close();
-        }
+    async add({ name, content }) {
+        await this.collection.insertOne({ name, content });
     }
 
     /**
      * 
      * @returns json data of the database
      */
-    static async get() {
-        try {
-            client.connect();
-            const database = client.db('localchat');
-            const messagesDB = database.collection('messages');
+    async get() {
+        const cursor = await this.collection.find();
 
-            const cursor = await messagesDB.find();
-
-            var messageJson = [];
-            for await (const m of cursor) {
-                messageJson.push(
-                    { 
-                        name: m.name,
-                        content: m.content
-                    }
-                );
-            }
-            return messageJson;
-        } finally {
-            await client.close();
+        const messageJson = [];
+        for await (const m of cursor) {
+            messageJson.push(
+                { 
+                    name: m.name,
+                    content: m.content
+                }
+            );
         }
+        return messageJson;
     }
 }
 
 /**
  * Class for manipulating and reading user data
  */
-class users {
+class Users {
+    constructor(storage) {
+        this.collection = storage.collection('users');
+    }
+
     /**
      * Adds a name to the users database
      * 
      * @param {*} name
      */
-    static async add(name) {
-        try {
-            client.connect();
-            const database = client.db('localchat');
-            const usersDB = database.collection('users');
-    
-            await usersDB.insertOne({ name: name });
-        } finally {
-            await client.close();
-        }
+    async add(name) {
+        await this.collection.insertOne({ name: name });
     }
 
     /**
@@ -81,24 +85,16 @@ class users {
      * 
      * @returns List of users
      */
-    static async get() {
-        try {
-            client.connect();
-            const database = client.db('localchat');
-            const usersDB = database.collection('users');
+    async get() {
+        const cursor = await this.collection.find();
 
-            const cursor = await usersDB.find();
-
-            var userJson = [];
-            for await(m of cursor) {
-                userJson.push({ name: m.name });
-            }
-
-            return userJson;
-        } finally {
-            await client.close();
+        const userJson = [];
+        for await(m of cursor) {
+            userJson.push({ name: m.name });
         }
+
+        return userJson;
     }
 }
 
-module.exports = { messages, users };
+module.exports = new Storage();
