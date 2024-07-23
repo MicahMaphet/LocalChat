@@ -4,8 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 class Storage {
     constructor() {
         // TODO use configurable db params
-        // const uri = 'mongodb://localhost:27017';
-        const uri = 'mongodb+srv://stickituser:17v^LC9FU7F3gH6i@cluster0.r9vurd9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+        const uri = 'mongodb://localhost:27017';
         this.client = new MongoClient(uri);
         this.db = this.client.db('localchat');
     }
@@ -40,6 +39,7 @@ class Messages {
      * }
      */
     async add({ name, content }) {
+        console.log(`added ${name} ${content}`)
         await this.collection.insertOne({ name, content });
     }
 
