@@ -1,15 +1,29 @@
 {
+  "name": "localchat",
+  "version": "1.0.0",
+  "description": "Chat room that runs a server on a localy.\r The server is programmed in Node.js and the database is in Mongodb.\r All the messages are saved in MongoDB and sent to the clients on connection.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run tsc && node build/server.js",
+    "tsc": "npm run clean && tsc",
+    "clean": "rm -rf build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "eslint": "^9.1.0",
+    "@types/lodash": "^4.17.7",
+    "@types/mongodb": "^4.0.7",
+    "@types/node": "^20.14.11",
     "nodemon": "^3.1.4",
-    "typescript": "^5.4.3"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "@types/express": "^4.17.21",
+    "@types/socket.io": "^3.0.2",
     "express": "^4.19.2",
-    "mongodb": "^6.7.0",
-    "mongosh": "^2.2.5",
-    "net": "^1.0.2",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.8.0",
     "socket.io": "^4.7.5"
   }
 }
