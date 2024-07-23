@@ -4,9 +4,11 @@
   "description": "Chat room that runs a server on a localy.\r The server is programmed in Node.js and the database is in Mongodb.\r All the messages are saved in MongoDB and sent to the clients on connection.",
   "main": "index.js",
   "scripts": {
-    "start": "npm run tsc && node build/server.js",
+    "start": "npm run tsc && node build/src/server.js",
+    "clean": "rm -rf build",
+    "compile": "npm run tsc",
     "tsc": "npm run clean && tsc",
-    "clean": "rm -rf build"
+    "test:connect": "node build/test/connect.js"
   },
   "keywords": [],
   "author": "",

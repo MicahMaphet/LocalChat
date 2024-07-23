@@ -7,7 +7,7 @@ const app: Express = express();
 const port = 3000;
 const io = new Server();
 
-__dirname = path.join(__dirname, '..');
+__dirname = path.join(__dirname, '../..');
 
 app.get('/', (req: Request, res: Response) => {
     res.sendFile(__dirname + '/handle-username.html');

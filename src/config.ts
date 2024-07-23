@@ -9,7 +9,7 @@ function Config(): ConfigType {
         dbPort: process.env.DB_PORT || '27017'
     }
 
-    let foundConfig = require('../db.config.json');
+    let foundConfig = require('../../db.config.json');
 
     const mergeCopyArray = (objVal, srcVal) => (objVal instanceof Array ? srcVal : undefined);
     config = _.mergeWith(config, foundConfig, mergeCopyArray);

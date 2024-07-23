@@ -1,3 +1,4 @@
+
 import { Collection, Db, MongoClient } from 'mongodb';
 import { ConfigType } from '../types/Config';
 import { MessageType } from '../types/Message';
@@ -19,15 +20,13 @@ class StorageService {
         return new Promise((resolve, reject) => {
             let options = Object.assign({}, this.configService.get(), args);
             let { dbUrl, dbHost, dbPort, dbName } = options;
-
+            
             console.log(dbUrl);
-            let attemptConnect = async () => {
-                return MongoClient.connect(dbUrl);
-            };
-
+            
+            
             let attemptConnectId = setInterval(async () => {
                 try {
-                    this.client = await attemptConnect();
+                    this.client = await MongoClient.connect(dbUrl);
                     this.db = this.client.db(dbName);
                     this.messages = new Messages(this.db);
                     this.users = new Users(this.db);
@@ -38,7 +37,7 @@ class StorageService {
                     clearInterval(attemptConnectId);
                     reject(new Error(`Failed to connect to database\n${err}`));
                 }
-            }, 2000);
+            }, 5000);
         });
     }
 
@@ -128,3 +127,4 @@ class Users {
 }
 
 export let Storage = new StorageService();
+
