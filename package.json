@@ -1,4 +1,8 @@
 {
+  "name": "localchat",
+  "scripts": {
+    "start": "node server.js"
+  },
   "devDependencies": {
     "eslint": "^9.1.0",
     "nodemon": "^3.1.4",
